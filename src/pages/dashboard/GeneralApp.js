@@ -4,9 +4,14 @@ import { Box, Stack } from "@mui/material";
 import Conversation from "../../components/Conversation";
 import { useTheme } from "@mui/material/styles";
 import Contact from "../../components/Contact";
+import { useSelector } from "react-redux";
+import SharedMessages from "../../components/SharedMessages";
+import StarredMessages from "../../components/StarredMessages";
 
 const GeneralApp = () => {
   const theme = useTheme();
+  const { sidebar } = useSelector((state) => state.app);
+
   return (
     <Stack direction={"row"} sx={{ width: "100%" }}>
       {/* chat */}
@@ -15,8 +20,8 @@ const GeneralApp = () => {
       <Box
         sx={{
           height: "100%",
-          // width: "calc(100vw-720px)", //chieu rong khung chat
-          width: "100%",
+          width: sidebar.open ? "calc(100vw - 740px)" : "calc(100vw - 420px)", //chieu rong khung chat
+          // width: "100%",
           backgroundColor:
             theme.palette.mode === "light"
               ? "#F0F4FA"
@@ -28,7 +33,19 @@ const GeneralApp = () => {
       </Box>
 
       {/* contact */}
-      <Contact />
+      {sidebar.open &&
+        (() => {
+          switch (sidebar.type) {
+            case "CONTACT":
+              return <Contact />;
+            case "STARRED":
+              return <StarredMessages />;
+            case "SHARED":
+              return <SharedMessages />;
+            default:
+              break;
+          }
+        })()}
     </Stack>
   );
 };
