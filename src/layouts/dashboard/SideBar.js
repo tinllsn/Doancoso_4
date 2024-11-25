@@ -15,9 +15,47 @@ import useSettings from "../../hooks/useSettings";
 import { faker } from "@faker-js/faker";
 import AntSwitch from "../../components/AntSwitch";
 import Logo from "../../assets/Images/logo.ico";
+import { useNavigate } from "react-router-dom";
+import { LogoutUser } from "../../redux/slices/auth";
+import { useDispatch } from "react-redux";
+
+const getPath = (index) => {
+  switch (index) {
+    case 0:
+      return "/app";
+
+    case 1:
+      return "/group";
+
+    case 2:
+      return "/call";
+
+    case 3:
+      return "/settings";
+
+    default:
+      break;
+  }
+};
+
+const getMenuPath = (index) => {
+  switch (index) {
+    case 0:
+      return "/profile";
+    case 1:
+      return "/settings";
+    case 2:
+      // TODO => Update token & set isAuth = false
+      return "/auth/login";
+    default:
+      break;
+  }
+};
 
 const SideBar = () => {
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const { onToggleMode } = useSettings();
 
@@ -25,6 +63,7 @@ const SideBar = () => {
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    // alert(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -83,6 +122,7 @@ const SideBar = () => {
                 <IconButton
                   onClick={() => {
                     setSelected(el.index);
+                    navigate(getPath(el.index));
                   }}
                   sx={{
                     width: "max-content",
@@ -114,6 +154,7 @@ const SideBar = () => {
             ) : (
               <IconButton
                 onClick={() => {
+                  navigate(getPath(3));
                   setSelected(3);
                 }}
                 sx={{
@@ -156,17 +197,29 @@ const SideBar = () => {
             }}
             anchorOrigin={{
               vertical: "bottom",
-              horizontal: "right"
+              horizontal: "right",
             }}
             transformOrigin={{
               vertical: "bottom",
-              horizontal: "left"
+              horizontal: "left",
             }}
           >
             <Stack spacing={1} p={1}>
-              {Profile_Menu.map((el) => (
-                <MenuItem onClick={handleClick}>
+              {Profile_Menu.map((el, idx) => (
+                <MenuItem
+                  onClick={() => {
+                    handleClick();
+                  }}
+                >
                   <Stack
+                    onClick={() => {
+                      if (idx === 2) {
+                        //if idx is 2 then dispatch logout
+                        dispatch(LogoutUser());
+                      } else {
+                        navigate(getMenuPath(idx));
+                      }
+                    }}
                     sx={{ width: 100 }}
                     direction="row"
                     alignItems={"center"}

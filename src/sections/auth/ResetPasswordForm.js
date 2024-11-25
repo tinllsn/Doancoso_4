@@ -8,19 +8,20 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 // import { ForgotPassword } from "../../redux/slices/auth";
 import { LoadingButton } from "@mui/lab";
+import { ForgotPassword } from "../../redux/slices/auth";
 
 // ----------------------------------------------------------------------
 
 const ResetPasswordForm = () => {
 //   const { isLoading } = useSelector((state) => state.auth);
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is required")
       .email("Email must be a valid email address"),
   });
 
-  const methods = useForm({
+  const methods = useForm({ 
     resolver: yupResolver(ResetPasswordSchema),
     defaultValues: { email: "demo@tawk.com" },
   });
@@ -30,7 +31,7 @@ const ResetPasswordForm = () => {
   const onSubmit = async (data) => {
     try {
       //   Send API Request
-    //   dispatch(ForgotPassword(data));
+      dispatch(ForgotPassword(data));
     } catch (error) {
       console.error(error);
     }
