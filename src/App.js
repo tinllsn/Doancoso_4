@@ -1,14 +1,15 @@
-// routes
-import Router from "./routes";
+// // routes
 // theme
-import ThemeProvider from "./theme";
 // components
-import ThemeSettings from "./components/settings";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector, useStore } from "react-redux";
-import { Snackbar } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import ThemeSettings from "./components/settings";
+import ThemeProvider from "./theme";
+import Router from "./routes";
 import { closeSnackBar } from "./redux/slices/app";
+// import { socket } from "./socket";
 
 const vertical = "bottom";
 const horizontal = "center";
@@ -20,16 +21,9 @@ const Alert = React.forwardRef((props, ref) => (
 function App() {
   const dispatch = useDispatch();
 
-  const { open, message, severity } = useSelector((state) => state.app.snackbar);
-
-  // const { open, message, severity } = useSelector(
-  //   (state) => console.log(state.app) 
-  // );
-  // const store = useStore();
-
-  // console.log(store.dispatch);
-  // // console.log(open);
-  // // console.log(severity);
+  const { severity, message, open } = useSelector(
+    (state) => state.app
+  );
 
   return (
     <>
@@ -40,7 +34,7 @@ function App() {
         </ThemeSettings>
       </ThemeProvider>
 
-      {/* {message && open ? (
+      {message && open ? (
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
@@ -64,24 +58,7 @@ function App() {
         </Snackbar>
       ) : (
         <></>
-      )} */}
-      {open && message && (
-        <Snackbar
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          open={open}
-          autoHideDuration={4000}
-          onClose={() => dispatch(closeSnackBar())}
-        >
-          <Alert
-            onClose={() => dispatch(closeSnackBar())}
-            severity={severity}
-            sx={{ width: "100%" }}
-          >
-            {message}
-          </Alert>
-        </Snackbar>
       )}
-      
     </>
   );
 }

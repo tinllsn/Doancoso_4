@@ -3,7 +3,7 @@ import { Box, Badge, Stack, Avatar, Typography } from "@mui/material";
 import { styled, useTheme, alpha } from "@mui/material/styles";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import { SelectConversation } from "../redux/slices/app";
+import { SelectConversation } from "../redux/slices/app";
 
 // const truncateText = (string, n) => {
 //   return string?.length > n ? `${string?.slice(0, n)}...` : string;
@@ -60,7 +60,7 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
   return (
     <Box
       onClick={() => {
-        // dispatch(SelectConversation({room_id: id}));
+        dispatch(SelectConversation({room_id: id}));
       }}
       sx={{
         width: "100%",
